@@ -1,26 +1,57 @@
-stage('Build') {
-    steps {
-        dir('Hello') {
-            bat 'mvn clean package'
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven_3.9'   // Name configured in Jenkins -> Global Tool Configuration
+        jdk 'JDK11'         // Name configured in Jenkins -> Global Tool Configuration
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Pull code from your GitHub repository
+                git branch: 'practise',
+                    url: 'https://github.com/Anonymous16050/mavencode.git',
+                    credentialsId: 'github-creds'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('Hello') {   // go into Hello folder where pom.xml is
+                    bat "mvn clean package"
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('Hello') {
+                    bat "mvn test"
+                }
+            }
+            post {
+                always {
+                    junit 'Hello/target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir('Hello') {
+                    echo 'Deploying application...'
+                    bat "java -jar target/*.jar &"
+                }
+            }
         }
     }
-}
-stage('Test') {
-    steps {
-        dir('Hello') {
-            bat 'mvn test'
-        }
-    }
+
     post {
         always {
-            junit 'Hello/target/surefire-reports/*.xml'
-        }
-    }
-}
-stage('Deploy') {
-    steps {
-        dir('Hello') {
-            bat 'java -jar target/ci-cd-demo-1.0-SNAPSHOT.jar'
+            mail to: 'rajkumarjittaaboyini@gmail.com',
+                 subject: "Build ${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: "Check console output at ${env.BUILD_URL}"
         }
     }
 }
