@@ -10,14 +10,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'practise',
-                    url: 'https://github.com/Anonymous16050/mavencode.git'
+                    url: 'https://github.com/Anonymous16050/mavencode.git',
+                    credentialsId: 'github-creds'
             }
         }
 
         stage('Build') {
             steps {
-                dir('Hello') {   // move into Hello directory where pom.xml exists
-                    bat 'mvn clean package'
+                dir('Hello') {
+                    bat "mvn clean package"
                 }
             }
         }
@@ -25,7 +26,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('Hello') {
-                    bat 'mvn test'
+                    bat "mvn test"
                 }
             }
             post {
@@ -35,20 +36,20 @@ pipeline {
             }
         }
 
-       stage('Deploy') {
-    steps {
-        dir('Hello') {
-            script {
-                // Capture the jar file name only (no full path)
-                def jarFile = bat(script: 'dir /b target\\*.jar', returnStdout: true).trim()
-                echo "Deploying ${jarFile}"
-                // Run it from target folder
-                bat "java -jar target\\${jarFile}"
+        stage('Deploy') {
+            steps {
+                dir('Hello') {
+                    script {
+                        // Get only the JAR filename (e.g. ci-cd-demo-1.0-SNAPSHOT.jar)
+                        def jarFile = bat(script: 'dir /b target\\*.jar', returnStdout: true).trim()
+                        echo "Deploying JAR: ${jarFile}"
+
+                        // Run the JAR
+                        bat "java -jar target\\${jarFile}"
+                    }
+                }
             }
         }
-    }
-}
-
     }
 
     post {
