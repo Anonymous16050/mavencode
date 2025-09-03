@@ -11,7 +11,7 @@ import org.openqa.selenium.WebElement;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class Dropdown {
+public class DropdownTest {
 	public static void main(String[] args) throws InterruptedException {
 		WebDriverManager.chromedriver().setup();
 		WebDriver driver= new ChromeDriver();
