@@ -1,50 +1,26 @@
-pipeline {
-    agent any
-
-    tools {
-        maven 'Maven_3.9'   // Jenkins Maven installation name
-        jdk 'JDK11'         // Jenkins JDK installation name
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'practise',
-                    url: 'https://github.com/Anonymous16050/mavencode.git',
-                    credentialsId: 'github-creds'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                bat 'mvn clean package'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application...'
-                bat 'java -jar target/ci-cd-demo-1.0-SNAPSHOT.jar'
-            }
+stage('Build') {
+    steps {
+        dir('Hello') {
+            bat 'mvn clean package'
         }
     }
-
+}
+stage('Test') {
+    steps {
+        dir('Hello') {
+            bat 'mvn test'
+        }
+    }
     post {
         always {
-            mail to: 'rajkumarjittaaboyini@gmail.com',
-                 subject: "Build ${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: "Check console output at ${env.BUILD_URL}"
+            junit 'Hello/target/surefire-reports/*.xml'
+        }
+    }
+}
+stage('Deploy') {
+    steps {
+        dir('Hello') {
+            bat 'java -jar target/ci-cd-demo-1.0-SNAPSHOT.jar'
         }
     }
 }
