@@ -9,7 +9,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/YourUser/YourRepo.git'
+                git branch: 'practise',
+                    url: 'https://github.com/Anonymous16050/mavencode.git',
+                    credentialsId: 'github-creds'
             }
         }
 
