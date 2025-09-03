@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven_3.9'
-        jdk 'JDK11'
+        maven 'Maven_3.9'   // Jenkins Maven installation name
+        jdk 'JDK11'         // Jenkins JDK installation name
     }
 
     stages {
@@ -35,7 +35,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                bat 'start java -jar target/ci-cd-demo-1.0-SNAPSHOT.jar'
+                bat 'java -jar target/ci-cd-demo-1.0-SNAPSHOT.jar'
             }
         }
     }
