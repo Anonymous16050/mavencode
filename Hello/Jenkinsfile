@@ -2,16 +2,15 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven_3.9'   // Jenkins Maven installation name
-        jdk 'JDK11'         // Jenkins JDK installation name
+        maven 'Maven_3.9'
+        jdk 'JDK11'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'practise',
-                    url: 'https://github.com/Anonymous16050/mavencode.git',
-                    credentialsId: 'github-creds'
+                    url: 'https://github.com/Anonymous16050/mavencode.git'
             }
         }
 
@@ -40,16 +39,16 @@ pipeline {
             steps {
                 dir('Hello') {
                     script {
-                        // Cleanly capture only the jar filename (no extra lines)
+                        // Correct double % for Jenkins bat
                         def jarFile = bat(
-                            script: 'for %i in (target\\*.jar) do @echo %~nxi',
+                            script: 'for %%i in (target\\*.jar) do @echo %%~nxi',
                             returnStdout: true
                         ).trim()
 
                         echo "Deploying JAR: ${jarFile}"
 
-                        // Run the jar
-                        bat "java -jar target\\${jarFile}"
+                        // Run the JAR
+                        bat "start java -jar target\\${jarFile}"
                     }
                 }
             }
