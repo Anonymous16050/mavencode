@@ -1,0 +1,61 @@
+# System files
+.DS_Store
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# Build directories
+bin/
+target/
+
+# Logs
+*.log
+
+# Backup / temp files
+*.swp
+*.tmp
+
+
+
+
+
+
+x
+
+
+
+x
+:q
+
+:!q
+
+
+
+
+X
+
+
+:wq
+:q
+
+
+^X
+
+
+
+^X
+
+
+
+
+
+
+
+
+
+
+
+
+
