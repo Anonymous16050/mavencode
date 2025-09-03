@@ -35,18 +35,20 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                dir('Hello') {
-                    script {
-                        // Find the built jar dynamically
-                        def jarFile = bat(script: 'dir /b target\\*.jar', returnStdout: true).trim()
-                        echo "Deploying ${jarFile}"
-                        bat "java -jar target\\${jarFile}"
-                    }
-                }
+       stage('Deploy') {
+    steps {
+        dir('Hello') {
+            script {
+                // Capture the jar file name only (no full path)
+                def jarFile = bat(script: 'dir /b target\\*.jar', returnStdout: true).trim()
+                echo "Deploying ${jarFile}"
+                // Run it from target folder
+                bat "java -jar target\\${jarFile}"
             }
         }
+    }
+}
+
     }
 
     post {
