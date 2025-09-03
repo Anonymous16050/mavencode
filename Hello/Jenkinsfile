@@ -2,24 +2,22 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven_3.9'   // Name configured in Jenkins -> Global Tool Configuration
-        jdk 'JDK11'         // Name configured in Jenkins -> Global Tool Configuration
+        maven 'Maven_3.9'   // Jenkins Maven installation name
+        jdk 'JDK11'         // Jenkins JDK installation name
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Pull code from your GitHub repository
                 git branch: 'practise',
-                    url: 'https://github.com/Anonymous16050/mavencode.git',
-                    credentialsId: 'github-creds'
+                    url: 'https://github.com/Anonymous16050/mavencode.git'
             }
         }
 
         stage('Build') {
             steps {
-                dir('Hello') {   // go into Hello folder where pom.xml is
-                    bat "mvn clean package"
+                dir('Hello') {   // move into Hello directory where pom.xml exists
+                    bat 'mvn clean package'
                 }
             }
         }
@@ -27,7 +25,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('Hello') {
-                    bat "mvn test"
+                    bat 'mvn test'
                 }
             }
             post {
@@ -40,8 +38,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 dir('Hello') {
-                    echo 'Deploying application...'
-                    bat "java -jar target/*.jar &"
+                    script {
+                        // Find the built jar dynamically
+                        def jarFile = bat(script: 'dir /b target\\*.jar', returnStdout: true).trim()
+                        echo "Deploying ${jarFile}"
+                        bat "java -jar target\\${jarFile}"
+                    }
                 }
             }
         }
