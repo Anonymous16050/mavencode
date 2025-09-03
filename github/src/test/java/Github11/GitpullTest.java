@@ -8,7 +8,7 @@ package Github11;
 
 	import static org.junit.jupiter.api.Assertions.assertEquals;
 
-	public class Gitpull{
+	public class GitpullTest{
 	    @Test
 	    public void openGoogleTest() {
 	        WebDriverManager.chromedriver().setup();
