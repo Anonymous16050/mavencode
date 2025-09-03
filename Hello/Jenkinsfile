@@ -40,11 +40,15 @@ pipeline {
             steps {
                 dir('Hello') {
                     script {
-                        // Get only the JAR filename (e.g. ci-cd-demo-1.0-SNAPSHOT.jar)
-                        def jarFile = bat(script: 'dir /b target\\*.jar', returnStdout: true).trim()
+                        // Cleanly capture only the jar filename (no extra lines)
+                        def jarFile = bat(
+                            script: 'for %i in (target\\*.jar) do @echo %~nxi',
+                            returnStdout: true
+                        ).trim()
+
                         echo "Deploying JAR: ${jarFile}"
 
-                        // Run the JAR
+                        // Run the jar
                         bat "java -jar target\\${jarFile}"
                     }
                 }
