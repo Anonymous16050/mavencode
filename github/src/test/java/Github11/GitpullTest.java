@@ -1,24 +1,14 @@
 package Github11;
-		
+	
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-	import org.junit.jupiter.api.Test;
-	import org.openqa.selenium.WebDriver;
-	import org.openqa.selenium.chrome.ChromeDriver;
-	import io.github.bonigarcia.wdm.WebDriverManager;
+public class  GitpullTest{
 
-	import static org.junit.jupiter.api.Assertions.assertEquals;
-
-	public class GitpullTest{
-	    @Test
-	    public void openGoogleTest() {
-	        WebDriverManager.chromedriver().setup();
-	        WebDriver driver = new ChromeDriver();
-	        driver.manage().window().maximize();
-	        driver.get("https://www.google.com");
-
-	        // Verify page title
-	        assertEquals("Google", driver.getTitle());
-
-	        driver.quit();
-	    }
-	}
+    @Test
+    public void testHello() {
+        String message = "Hello Jenkins!";
+        System.out.println(message);  // You can see this in the Jenkins console
+        assertEquals("Hello Jenkins!", message);
+    }
+}
